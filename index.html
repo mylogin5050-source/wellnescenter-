@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Serenity Ayurveda — Authentic Ayurvedic Wellness Spa</title>
+<meta name="description" content="Authentic Ayurvedic treatments, rejuvenating massages, and holistic wellness programs for deep relaxation and natural healing."/>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          sage: { 50:'#F4F6F1', 100:'#E4E9DC', 200:'#C9D3BB', 300:'#A8B895', 400:'#8DA574', 500:'#7A8B6F', 600:'#5E6E54', 700:'#4A5743', 800:'#3A4435', 900:'#2D3E2D' },
+          gold:  { 300:'#E0C98A', 400:'#D4B876', 500:'#C9A961', 600:'#B08F45', 700:'#8B6F35' },
+          cream: { 50:'#FBF9F3', 100:'#F5F1E8', 200:'#EBE4D1' },
+          earth: { 500:'#8B6F47', 600:'#6B5535', 700:'#4F3F27' }
+        },
+        fontFamily: {
+          serif: ['"Playfair Display"', 'serif'],
+          sans:  ['Inter', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: #FBF9F3; color: #2D3E2D; }
+  h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
+
+  /* Decorative lotus */
+  .lotus-divider::before, .lotus-divider::after {
+    content:''; flex:1; height:1px; background: linear-gradient(90deg, transparent, #C9A961, transparent);
+  }
+
+  /* Fade-in on scroll */
+  .reveal { opacity:0; transform: translateY(30px); transition: all .8s ease; }
+  .reveal.visible { opacity:1; transform: translateY(0); }
+
+  /* Hero parallax bg */
+  .hero-bg {
+    background-image: linear-gradient(rgba(45,62,45,.55), rgba(45,62,45,.65)),
+      url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80');
+    background-size: cover; background-position: center;
+  }
+
+  /* Gold shimmer on hover */
+  .gold-link { position:relative; }
+  .gold-link::after {
+    content:''; position:absolute; left:0; bottom:-4px; width:0; height:2px;
+    background: #C9A961; transition: width .3s ease;
+  }
+  .gold-link:hover::after { width:100%; }
+
+  /* Service card */
+  .service-card { transition: all .4s ease; }
+  .service-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -15px rgba(45,62,45,.25); }
+
+  /* Page transitions */
+  .page { display:none; animation: fadeIn .5s ease; }
+  .page.active { display:block; }
+  @keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width:8px; }
+  ::-webkit-scrollbar-track { background:#F5F1E8; }
+  ::-webkit-scrollbar-thumb { background:#7A8B6F; border-radius:4px; }
+</style>
+</head>
+
+<body class="antialiased">
+
+<!-- ============ NAVIGATION ============ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-cream-50/95 backdrop-blur-md shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#" onclick="showPage('home')" class="flex items-center gap-2 group">
+      <svg class="w-9 h-9 text-gold-500 group-hover:rotate-12 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C8 6 6 10 6 14c0 3.3 2.7 6 6 6s6-2.7 6-6c0-4-2-8-6-12zm0 16c-2.2 0-4-1.8-4-4 0-2.5 1.3-5.5 4-9 2.7 3.5 4 6.5 4 9 0 2.2-1.8 4-4 4z"/>
+      </svg>
+      <div>
+        <div class="font-serif text-xl font-semibold text-sage-900 leading-none">Serenity</div>
+        <div class="text-[10px] tracking-[0.3em] text-gold-600 uppercase">Ayurveda</div>
+      </div>
+    </a>
+
+    <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-sage-800">
+      <li><a onclick="showPage('home')"      class="nav-link cursor-pointer gold-link">Home</a></li>
+      <li><a onclick="showPage('about')"     class="nav-link cursor-pointer gold-link">About</a></li>
+      <li><a onclick="showPage('services')"  class="nav-link cursor-pointer gold-link">Services</a></li>
+      <li><a onclick="showPage('therapists')" class="nav-link cursor-pointer gold-link">Therapists</a></li>
+      <li><a onclick="showPage('contact')"   class="nav-link cursor-pointer gold-link">Contact</a></li>
+    </ul>
+
+    <button onclick="showPage('contact')" class="hidden md:inline-block bg-sage-900 hover:bg-sage-800 text-cream-50 px-6 py-2.5 rounded-full text-sm font-medium transition-all hover:shadow-lg">
+      Book Consultation
+    </button>
+
+    <!-- Mobile menu button -->
+    <button id="menuBtn" class="md:hidden text-sage-900">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="hidden md:hidden bg-cream-50 border-t border-sage-100">
+    <ul class="flex flex-col p-6 gap-4 text-sage-800 font-medium">
+      <li><a onclick="showPage('home')"      class="cursor-pointer">Home</a></li>
+      <li><a onclick="showPage('about')"     class="cursor-pointer">About</a></li>
+      <li><a onclick="showPage('services')"  class="cursor-pointer">Services</a></li>
+      <li><a onclick="showPage('therapists')" class="cursor-pointer">Therapists</a></li>
+      <li><a onclick="showPage('contact')"   class="cursor-pointer">Contact</a></li>
+      <li><button onclick="showPage('contact')" class="bg-sage-900 text-cream-50 px-6 py-2.5 rounded-full w-full">Book Consultation</button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ HOME PAGE ============ -->
+<main id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero-bg min-h-screen flex items-center pt-20">
+    <div class="max-w-7xl mx-auto px-6 py-20 text-center text-cream-50">
+      <p class="text-gold-300 tracking-[0.4em] uppercase text-xs mb-6 reveal">— Authentic • Timeless • Healing —</p>
+      <h1 class="font-serif text-5xl md:text-7xl font-medium leading-tight mb-6 reveal">
+        Awaken Your Body,<br/>
+        <span class="italic text-gold-300">Restore Your Soul</span>
+      </h1>
+      <p class="max-w-2xl mx-auto text-lg md:text-xl text-cream-100 mb-10 reveal">
+        Experience 5,000 years of Ayurvedic wisdom through personalized treatments, sacred rituals, and holistic healing crafted for modern life.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center reveal">
+        <button onclick="showPage('contact')" class="bg-gold-500 hover:bg-gold-600 text-sage-900 px-8 py-4 rounded-full font-semibold transition-all hover:shadow-2xl hover:shadow-gold-500/30">
+          Book Your Journey →
+        </button>
+        <button onclick="showPage('services')" class="border-2 border-cream-100 hover:bg-cream-50 hover:text-sage-900 text-cream-50 px-8 py-4 rounded-full font-semibold transition-all">
+          Explore Treatments
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <section class="bg-sage-900 text-cream-100 py-8">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div><div class="font-serif text-3xl text-gold-400">15+</div><div class="text-xs tracking-widest uppercase mt-1">Years of Healing</div></div>
+      <div><div class="font-serif text-3xl text-gold-400">8,000+</div><div class="text-xs tracking-widest uppercase mt-1">Happy Guests</div></div>
+      <div><div class="font-serif text-3xl text-gold-400">12</div><div class="text-xs tracking-widest uppercase mt-1">Certified Therapists</div></div>
+      <div><div class="font-serif text-3xl text-gold-400">100%</div><div class="text-xs tracking-widest uppercase mt-1">Natural Ingredients</div></div>
+    </div>
+  </section>
+
+  <!-- 3 KEY BENEFITS -->
+  <section class="py-24 bg-cream-50">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <p class="text-gold-600 tracking-[0.3em] uppercase text-xs mb-3">Why Ayurveda</p>
+        <h2 class="font-serif text-4xl md:text-5xl text-sage-900 mb-4">The Three Pillars of Wellness</h2>
+        <div class="lotus-divider flex items-center gap-4 max-w-xs mx-auto"></div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white p-10 rounded-2xl border border-sage-100 text-center reveal">
+          <div class="w-16 h-16 mx-auto mb-6 bg-sage-100 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-sage-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4 7v10l8 5 8-5V7l-8-5zm0 2.3L18 8v8l-6 3.7L6 16V8l6-3.7z"/></svg>
+          </div>
+          <h3 class="font-serif text-2xl text-sage-900 mb-3">Balance</h3>
+          <p class="text-sage-700 leading-relaxed">Harmonize your body's doshas — Vata, Pitta, and Kapha — to restore natural equilibrium and vibrant energy.</p>
+        </div>
+
+        <div class="bg-white p-10 rounded-2xl border border-sage-100 text-center reveal">
+          <div class="w-16 h-16 mx-auto mb-6 bg-sage-100 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-sage-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8 6 6 10 6 14c0 3.3 2.7 6 6 6s6-2.7 6-6c0-4-2-8-6-12z"/></svg>
+          </div>
+          <h3 class="font-serif text-2xl text-sage-900 mb-3">Purification</h3>
+          <p class="text-sage-700 leading-relaxed">Gently cleanse toxins from your system through ancient Panchakarma rituals, leaving you renewed from within.</p>
+        </div>
+
+        <div class="bg-white p-10 rounded-2xl border border-sage-100 text-center reveal">
+          <div class="w-16 h-16 mx-auto mb-6 bg-sage-100 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-sage-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          </div>
+          <h3 class="font-serif text-2xl text-sage-900 mb-3">Rejuvenation</h3>
+          <p class="text-sage-700 leading-relaxed">Revitalize mind, body, and spirit with herbal oils, warm therapies, and mindful practices that nurture lasting wellness.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES PREVIEW -->
+  <section class="py-24 bg-sage-50">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <p class="text-gold-600 tracking-[0.3em] uppercase text-xs mb-3">Our Signature Treatments</p>
+        <h2 class="font-serif text-4xl md:text-5xl text-sage-900 mb-4">Healing Rituals Await</h2>
+        <div class="lotus-divider flex items-center gap-4 max-w-xs mx-auto"></div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="service-card bg-white rounded-2xl overflow-hidden shadow-sm reveal">
+          <div class="h-56 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80')"></div>
+          <div class="p-8">
+            <div class="text-gold-600 text-xs tracking-widest uppercase mb-2">Signature</div>
+            <h3 class="font-serif text-2xl text-sage-900 mb-3">Abhyanga Massage</h3>
+            <p class="text-sage-700 mb-5">Warm herbal oil synchronized massage to nourish tissues, calm the nervous system, and promote deep relaxation.</p>
+            <button onclick="showPage('services')" class="text-sage-900 font-semibold gold-link">Learn More →</button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="service-card bg-white rounded-2xl overflow-hidden shadow-sm reveal">
+          <div class="h-56 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=800&q=80')"></div>
+          <div class="p-8">
+            <div class="text-gold-600 text-xs tracking-widest uppercase mb-2">Detox</div>
+            <h3 class="font-serif text-2xl text-sage-900 mb-3">Shirodhara</h3>
+            <p class="text-sage-700 mb-5">A continuous stream of warm oil poured on the forehead — a profound therapy for stress, insomnia, and mental clarity.</p>
+            <button onclick="showPage('services')" class="text-sage-900 font-semibold gold-link">Learn More →</button>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="service-card bg-white rounded-2xl overflow-hidden shadow-sm reveal">
+          <div class="h-56 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80')"></div>
+          <div class="p-8">
+            <div class="text-gold-600 text-xs tracking-widest uppercase mb-2">Program</div>
+            <h3 class="font-serif text-2xl text-sage-900 mb-3">Panchakarma Retreat</h3>
+            <p class="text-sage-700 mb-5">A 7-day immersive cleansing journey combining five sacred therapies to reset your body and awaken vitality.</p>
+            <button onclick="showPage('services')" class="text-sage-900 font-semibold gold-link">Learn More →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-14 reveal">
+        <button onclick="showPage('services')" class="bg-sage-900 hover:bg-sage-800 text-cream-50 px-10 py-4 rounded-full font-semibold transition-all hover:shadow-xl">
+          View All Treatments
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="py-24 bg-cream-100">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <p class="text-gold-600 tracking-[0.3em] uppercase text-xs mb-3 reveal">Guest Stories</p>
+      <h2 class="font-serif text-4xl md:text-5xl text-sage-900 mb-14 reveal">Words From Our Guests</h2>
+
+      <div id="testimonialSlider" class="relative">
+        <div class="testimonial-slide">
+          <svg class="w-12 h-12 mx-auto text-gold-400 mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9.5 6C6.5 6 4 8.5 4 11.5S6.5 17 9.5 17c.5 0 1-.1 1.5-.2-.5 1-1.5 2.2-3 3l1 2c3-1.5 5-4 5.5-7.3.3-1 .5-2 .5-3C15 8.5 12.5 6 9.5 6zm10 0c-3 0-5.5 2.5-5.5 5.5S16.5 17 19.5 17c.5 0 1-.1 1.5-.2-.5 1-1.5 2.2-3 3l1 2c3-1.5 5-4 5.5-7.3.3-1 .5-2 .5-3C25 8.5 22.5 6 19.5 6z"/></svg>
+          <p id="testimonialText" class="font-serif text-2xl md:text-3xl text-sage-800 italic leading-relaxed mb-8">
+            "A truly transformative experience. The therapists at Serenity Ayurveda understood my body like no one else. I left feeling lighter, calmer, and more alive."
+          </p>
+          <div>
+            <div id="testimonialName" class="font-semibold text-sage-900">Ananya Sharma</div>
+            <div id="testimonialRole" class="text-sm text-gold-600">Yoga Instructor • Mumbai</div>
+          </div>
+        </div>
+
+        <div class="flex justify-center gap-2 mt-10">
+          <button onclick="changeTestimonial(0)" class="dot w-3 h-3 rounded-full bg-sage-900"></button>
+          <button onclick="changeTestimonial(1)" class="dot w-3 h-3 rounded-full bg-sage-300"></button>
+          <button onclick="changeTestimonial(2)" class="dot w-3 h-3 rounded-full bg-sage-300"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="py-24 bg-sage-900 text-cream-50 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image:url('https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=1920&q=80'); background-size:cover; background-position:center;"></div>
+    <div class="max-w-4xl mx-auto px-6 text-center relative">
+      <p class="text-gold-400 tracking-[0.3em] uppercase text-xs mb-4 reveal">Begin Your Journey</p>
+      <h2 class="font-serif text-4xl md:text-6xl mb-6 reveal">Your Path to Wellness<br/><span class="italic text-gold-300">Starts Today</span></h2>
+      <p class="text-lg text-cream-100 mb-10 max-w-2xl mx-auto reveal">
+        Book a complimentary dosha consultation and discover the personalized Ayurvedic ritual crafted just for you.
+      </p>
+      <button onclick="showPage('contact')" class="bg-gold-500 hover:bg-gold-600 text-sage-900 px-10 py-4 rounded-full font-semibold transition-all hover:shadow-2xl hover:shadow-gold-500/40 reveal">
+        Schedule Free Consultation
+      </button>
+    </div>
+  </section>
+</main>
+
+<!-- ============ ABOUT PAGE ============ -->
+<main id="page-about" class="page">
+  <section class="pt-32 pb-16 bg-sage-50">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-gold-600 tracking-[0.3em] uppercase text-xs mb-3">Our Story</p>
+      <h1 class="font-serif text-5xl md:text-6xl text-sage-900 mb-6">Rooted in Tradition,<br/><span class="italic text-gold-600">Crafted for You</span></h1>
+      <div class="lotus-divider flex items-center gap-4 max-w-xs mx-auto"></div>
+    </div>
+  </section>
+
+  <section class="py-20 bg-cream-50">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+      <div class="reveal">
+        <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=800&q=80" alt="Our spa" class="rounded-2xl shadow-xl"/>
+      </div>
+      <div class="reveal">
+        <h2 class="font-serif text-4xl text-sage-900 mb-6">A Sanctuary Born of Love</h2>
+        <p class="text-sage-700 leading-relaxed mb-4">
+          Serenity Ayurveda was founded in 2010 by Dr. Meera Nair, a third-generation Vaidya (Ayurvedic physician) who dreamed of bringing authentic, uncompromised Ayurvedic healing to the modern world.
+        </p>
+        <p class="text-sage-700 leading-relaxed mb-4">
+          What began as a small treatment room in Kerala has blossomed into a beloved wellness sanctuary — a place where ancient wisdom meets contemporary comfort, and where every guest is treated like family.
+        </p>
+        <p class="text-sage-700 leading-relaxed">
+          Today, we remain devoted to the same principles that guided our founders: purity of herbs, precision of technique, and the profound belief that true wellness begins within.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="py-20 bg-sage-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <p class="text-gold-600 tracking-[0.3em] uppercase text-xs mb-3">Our Commitment</p>
+        <h2 class="font-serif text-4xl md:text-5xl text-sage-900">The Values We Live By</h2>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white p-8 rounded-2xl border border-sage-100 reveal">
+          <div class="text-gold-500 text-4xl font-serif mb-3">01</div>
+          <h3 class="font-serif text-xl text-sage-900 mb-2">Authenticity</h3>
+          <p class="text-sage-700 text-sm">Every treatment follows classical Ayurvedic texts, prepared by certified Vaidyas.</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl border border-sage-100 reveal">
+          <div class="text-gold-500 text-4xl font-serif mb-3">02</div>
+          <h3 class="font-serif text-xl text-sage-900 mb-2">Purity</h3>
+          <p class="text-sage-700 text-sm">100% organic, cold-pressed oils and herbs sourced directly from our partner farms.</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl border border-sage-100 reveal">
+          <div class="text-gold-500 text-4xl font-serif mb-3">03</div>
+          <h3 class="font-serif text-xl text-sage-900 mb-2">Personalization</h3>
+          <p class="text-sage-700 text-sm">No two bodies are alike — every ritual is tailored to your unique dosha profile.</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl border border-sage-100 reveal">
+          <div class="text-gold-500 text-4xl font-serif mb-3">04</div>
+          <h3 class="font-serif text-xl text-sage-900 mb-2">Compassion</h3>
+          <p class="text-sage-700 text-sm">We heal with heart — creating a safe, nurturing space for your transformation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ SERVICES PAGE ============ -->
+<main id="page-services" class="page">
+  <section class="pt-32 pb-16 bg-sage-50">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-gold-600 tracking-[0.3em] uppercase text-xs mb-3">Treatments & Programs</p>
+      <h1 class="font-serif text-5xl md:text-6xl text-sage-900 mb-6">Our Healing <span class="italic text-gold-600">Rituals</span></h1>
+      <p class="text-sage-700 max-w-2xl mx-auto">Each treatment is a sacred ceremony — thoughtfully designed to restore balance, release tension, and awaken your innate vitality.</p>
+    </div>
+  </section>
+
+  <section class="py-20 bg-cream-50">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Service 1 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm service-card reveal">
+        <div class="h-48 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="p-7">
+          <div class="flex justify-between items-start mb-3">
+            <h3 class="font-serif text-2xl text-sage-900">Abhyanga</h3>
+            <span class="text-gold-600 font-semibold">$95</span>
+          </div>
+          <p class="text-sage-700 text-sm mb-4">75 min • Warm herbal oil full-body massage for deep nourishment.</p>
+          <button onclick="showPage('contact')" class="text-sage-900 font-semibold gold-link text-sm">Book Now →</button>
+        </div>
+      </div>
+
+      <!-- Service 2 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm service-card reveal">
+        <div class="h-48 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="p-7">
+          <div class="flex justify-between items-start mb-3">
+            <h3 class="font-serif text-2xl text-sage-900">Shirodhara</h3>
+            <span class="text-gold-600 font-semibold">$120</span>
+          </div>
+          <p class="text-sage-700 text-sm mb-4">60 min • Continuous warm oil stream for mental clarity & calm.</p>
+          <button onclick="showPage('contact')" class="text-sage-900 font-semibold gold-link text-sm">Book Now →</button>
+        </div>
+      </div>
+
+      <!-- Service 3 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm service-card reveal">
+        <div class="h-48 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1519824145371-296894a0daa9?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="p-7">
+          <div class="flex justify-between items-start mb-3">
+            <h3 class="font-serif text-2xl text-sage-900">Udvartana</h3>
+            <span class="text-gold-600 font-semibold">$85</span>
+          </div>
+          <p class="text-sage-700 text-sm mb-4">60 min • Herbal powder massage for detox & weight balance.</p>
+          <button onclick="showPage('contact')" class="text-sage-900 font-semibold gold-link text-sm">Book Now →</button>
+        </div>
+      </div>
+
+      <!-- Service 4 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm service-card reveal">
+        <div class="h-48 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="p-7">
+          <div class="flex justify-between items-start mb-3">
+            <h3 class="font-serif text-2xl text-sage-900">Pinda Sweda</h3>
+            <span class="text-gold-600 font-semibold">$110</span>
+          </div>
+          <p class="text-sage-700 text-sm mb-4">75 min • Herbal bolus sweat therapy for joint & muscle relief.</p>
+          <button onclick="showPage('contact')" class="text-sage-900 font-semibold gold-link text-sm">Book Now →</button>
+        </div>
+      </div>
+
+      <!-- Service 5 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm service-card reveal">
+        <div class="h-48 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="p-7">
+          <div class="flex justify-between items-start mb-3">
+            <h3 class="font-serif text-2xl text-sage-900">Panchakarma</h3>
+            <span class="text-gold-600 font-semibold">$1,200</span>
+          </div>
+          <p class="text-sage-700 text-sm mb-4">7-day program • Complete five-action detox & rejuvenation.</p>
+          <button onclick="showPage('contact')" class="text-sage-900 font-semibold gold-link text-sm">Book Now →</button>
+        </div>
+      </div>
+
+      <!-- Service 6 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm service-card reveal">
+        <div class="h-48 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="p-7">
+          <div class="flex justify-between items-start mb-3">
+            <h3 class="font-serif text-2xl text-sage-900">Nasya</h3>
+            <span class="text-gold-600 font-semibold">$75</span>
+          </div>
+          <p class="text-sage-700 text-sm mb-4">45 min • Nasal herbal therapy for sinus, head & sensory clarity.</p>
+          <button onclick="showPage('contact')" class="text-sage-900 font-semibold gold-link text-sm">Book Now →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ THERAPISTS PAGE ============ -->
+<main id="page-therapists" class="page">
+  <section class="pt-32 pb-16 bg-sage-50">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-gold-600 tracking-[0.3em] uppercase text-xs mb-3">Meet Our Healers</p>
+      <h1 class="font-serif text-5xl md:text-6xl text-sage-900 mb-6">Hands That <span class="italic text-gold-600">Heal</span></h1>
+      <p class="text-sage-700 max-w-2xl mx-auto">Our therapists are certified Ayurvedic practitioners trained in Kerala's ancient gurukula tradition — each bringing decades of devotion to their craft.</p>
+    </div>
+  </section>
+
+  <section class="py-20 bg-cream-50">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
+      <div class="text-center reveal">
+        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=500&q=80" class="w-48 h-48 rounded-full mx-auto mb-5 object-cover border-4 border-gold-400"/>
+        <h3 class="font-serif text-2xl text-sage-900">Dr. Meera Nair</h3>
+        <p class="text-gold-600 text-sm tracking-widest uppercase mb-3">Founder • BAMS</p>
+        <p class="text-sage-700 text-sm">25+ years in classical Ayurveda. Specializes in Panchakarma and women's wellness.</p>
+      </div>
+      <div class="text-center reveal">
+        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=500&q=80" class="w-48 h-48 rounded-full mx-auto mb-5 object-cover border-4 border-gold-400"/>
+        <h3 class="font-serif text-2xl text-sage-900">Arjun Varma</h3>
+        <p class="text-gold-600 text-sm tracking-widest uppercase mb-3">Senior Therapist</p>
+        <p class="text-sage-700 text-sm">Master of Marma therapy and Abhyanga. 15 years of dedicated practice.</p>
+      </div>
+      <div class="text-center reveal">
+        <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=500&q=80" class="w-48 h-48 rounded-full mx-auto mb-5 object-cover border-4 border-gold-400"/>
+        <h3 class="font-serif text-2xl text-sage-900">Priya Raman</h3>
+        <p class="text-gold-600 text-sm tracking-widest uppercase mb-3">Wellness Coach</p>
+        <p class="text-sage-700 text-sm">Certified in Shirodhara, yoga therapy, and holistic lifestyle counseling.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ CONTACT PAGE ============ -->
+<main id="page-contact" class="page">
+  <section class="pt-32 pb-16 bg-sage-50">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-gold-600 tracking-[0.3em] uppercase text-xs mb-3">Get in Touch</p>
+      <h1 class="font-serif text-5xl md:text-6xl text-sage-900 mb-6">Begin Your <span class="italic text-gold-600">Journey</span></h1>
+      <p class="text-sage-700 max-w-2xl mx-auto">Book a complimentary dosha consultation or simply say hello. We'd love to welcome you.</p>
+    </div>
+  </section>
+
+  <section class="py-20 bg-cream-50">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+      <!-- Contact Info -->
+      <div class="reveal">
+        <h2 class="font-serif text-3xl text-sage-900 mb-8">Visit Our Sanctuary</h2>
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <div class="w-12 h-12 bg-sage-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-sage-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-sage-900">Address</h3>
+              <p class="text-sage-700">42 Lotus Garden Lane,<br/>Kerala, India 682001</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-12 h-12 bg-sage-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-sage-700" fill="currentColor" viewBox="0 0 24 24"><path d="M20 15.5c-1.2 0-2.5-.2-3.6-.6-.3-.1-.7 0-1 .2l-2.2 2.2c-2.8-1.4-5.1-3.8-6.6-6.6l2.2-2.2c.3-.3.4-.7.2-1-.4-1.1-.6-2.4-.6-3.6 0-.6-.4-1-1-1H4c-.6 0-1 .4-1 1 0 9.4 7.6 17 17 17 .6 0 1-.4 1-1v-3.5c0-.6-.4-1-1-1z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-sage-900">Phone</h3>
+              <p class="text-sage-700">+91 484 123 4567</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-12 h-12 bg-sage-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-sage-700" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-sage-900">Email</h3>
+              <p class="text-sage-700">namaste@serenityayurveda.com</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-12 h-12 bg-sage-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-sage-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 17.9V18h-2v1.9C7.6 19.4 5 16.4 5 13h1.9v-2H5c.4-3.4 3-6 6.4-6.4V5h2v1.6c3.4.4 6 3 6.4 6.4h-1.9v2h1.9c-.4 3.4-3 6-6.4 6.4z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-sage-900">Hours</h3>
+              <p class="text-sage-700">Mon–Sun: 7:00 AM – 9:00 PM</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <form id="contactForm" class="bg-white p-8 rounded-2xl shadow-sm border border-sage-100 reveal">
+        <h2 class="font-serif text-3xl text-sage-900 mb-6">Book a Consultation</h2>
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm font-medium text-sage-800 mb-1">Full Name</label>
+            <input required type="text" class="w-full px-4 py-3 border border-sage-200 rounded-lg focus:border-gold-500 focus:outline-none"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-sage-800 mb-1">Email</label>
+            <input required type="email" class="w-full px-4 py-3 border border-sage-200 rounded-lg focus:border-gold-500 focus:outline-none"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-sage-800 mb-1">Treatment Interest</label>
+            <select class="w-full px-4 py-3 border border-sage-200 rounded-lg focus:border-gold-500 focus:outline-none">
+              <option>Complimentary Consultation</option>
+              <option>Abhyanga Massage</option>
+              <option>Shirodhara</option>
+              <option>Panchakarma Program</option>
+              <option>Other / Not Sure</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-sage-800 mb-1">Message</label>
+            <textarea rows="4" class="w-full px-4 py-3 border border-sage-200 rounded-lg focus:border-gold-500 focus:outline-none"></textarea>
+          </div>
+          <button type="submit" class="w-full bg-sage-900 hover:bg-sage-800 text-cream-50 py-4 rounded-full font-semibold transition-all hover:shadow-xl">
+            Send Message
+          </button>
+          <p id="formSuccess" class="hidden text-center text-green-700 font-medium">✨ Thank you! We'll be in touch within 24 hours.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-sage-900 text-cream-100 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10 mb-12">
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <svg class="w-8 h-8 text-gold-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8 6 6 10 6 14c0 3.3 2.7 6 6 6s6-2.7 6-6c0-4-2-8-6-12z"/></svg>
+        <div>
+          <div class="font-serif text-xl text-cream-50">Serenity</div>
+          <div class="text-[10px] tracking-[0.3em] text-gold-400 uppercase">Ayurveda</div>
+        </div>
+      </div>
+      <p class="text-sm text-cream-200">Authentic Ayurvedic healing rooted in 5,000 years of wisdom.</p>
+    </div>
+    <div>
+      <h4 class="font-serif text-lg text-gold-400 mb-4">Explore</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a onclick="showPage('home')" class="cursor-pointer hover:text-gold-400">Home</a></li>
+        <li><a onclick="showPage('about')" class="cursor-pointer hover:text-gold-400">About</a></li>
+        <li><a onclick="showPage('services')" class="cursor-pointer hover:text-gold-400">Services</a></li>
+        <li><a onclick="showPage('therapists')" class="cursor-pointer hover:text-gold-400">Therapists</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-serif text-lg text-gold-400 mb-4">Contact</h4>
+      <ul class="space-y-2 text-sm text-cream-200">
+        <li>42 Lotus Garden Lane</li>
+        <li>Kerala, India 682001</li>
+        <li>+91 484 123 4567</li>
+        <li>namaste@serenityayurveda.com</li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-serif text-lg text-gold-400 mb-4">Newsletter</h4>
+      <p class="text-sm text-cream-200 mb-3">Receive seasonal wellness tips & exclusive offers.</p>
+      <form class="flex">
+        <input type="email" placeholder="Your email" class="flex-1 px-4 py-2 rounded-l-full bg-sage-800 border border-sage-700 text-cream-50 text-sm focus:outline-none"/>
+        <button class="bg-gold-500 hover:bg-gold-600 text-sage-900 px-4 rounded-r-full font-semibold text-sm">→</button>
+      </form>
+    </div>
+  </div>
+  <div class="border-t border-sage-800 pt-6 text-center text-xs text-cream-300">
+    © 2026 Serenity Ayurveda. All rights reserved. • Crafted with 🌿 and intention.
+  </div>
+</footer>
+
+<!-- ============ JAVASCRIPT ============ -->
+<script>
+  // Page navigation
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('mobileMenu').classList.add('hidden');
+    // Re-trigger reveal animations
+    setTimeout(initReveal, 100);
+  }
+
+  // Mobile menu toggle
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+  });
+
+  // Scroll reveal
+  function initReveal() {
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+  }
+  initReveal();
+
+  // Navbar shadow on scroll
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 20) nav.classList.add('shadow-md');
+    else nav.classList.remove('shadow-md');
+  });
+
+  // Testimonial slider
+  const testimonials = [
+    { text: '"A truly transformative experience. The therapists at Serenity Ayurveda understood my body like no one else. I left feeling lighter, calmer, and more alive."', name: 'Ananya Sharma', role: 'Yoga Instructor • Mumbai' },
+    { text: '"The Panchakarma program changed my life. After years of chronic fatigue, I finally feel like myself again. This place is pure magic."', name: 'David Chen', role: 'Entrepreneur • Singapore' },
+    { text: '"From the moment I walked in, I felt wrapped in care. The Shirodhara session was the deepest relaxation I have ever experienced."', name: 'Isabella Rossi', role: 'Writer • Milan' }
+  ];
+  let currentTestimonial = 0;
+  function changeTestimonial(i) {
+    currentTestimonial = i;
+    document.getElementById('testimonialText').textContent = testimonials[i].text;
+    document.getElementById('testimonialName').textContent = testimonials[i].name;
+    document.getElementById('testimonialRole').textContent = testimonials[i].role;
+    document.querySelectorAll('.dot').forEach((d, idx) => {
+      d.classList.toggle('bg-sage-900', idx === i);
+      d.classList.toggle('bg-sage-300', idx !== i);
+    });
+  }
+  setInterval(() => changeTestimonial((currentTestimonial + 1) % testimonials.length), 6000);
+
+  // Contact form
+  document.getElementById('contactForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    document.getElementById('formSuccess').classList.remove('hidden');
+    e.target.reset();
+    setTimeout(() => document.getElementById('formSuccess').classList.add('hidden'), 5000);
+  });
+</script>
+
+</body>
+</html>
